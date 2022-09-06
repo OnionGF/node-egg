@@ -5,8 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master, main ]
 
 jobs:
   build:
@@ -19,21 +18,24 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-    - name: Checkout Git Source
-      uses: actions/checkout@v2
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - name: deploy
+      uses: appleboy/ssh-action@master
+      env:
+        ACCESSKEYID: ${{ secrets.ACCESSKEYID }}
+        ACCESSKEYSECRET: ${{ secrets.ACCESSKEYSECRET }}
       with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Install Dependencies
-      run: npm i -g npminstall@5 && npminstall
-
-    - name: Continuous Integration
-      run: npm run ci
-
-    - name: Code Coverage
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        host: ${{ secret.HOST }}
+        username: ${{ secret.USERNAME }}
+        password: ${{ secret.PASSWORD }}
+        port: ${{ secret.PORT }}
+        envs: ACCESSKEYID,ACCESSKEYSECRET
+        script:  |
+          export ACCESSKEYID=$ACCESSKEYID
+          export ACCESSKEYSECRET=$ACCESSKEYSECRET
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/bash_completion"
+          cd /root/node-egg
+          git pull origin master
+          npm install --production
+          npm run stop
+          npm run start
