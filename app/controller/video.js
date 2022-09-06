@@ -49,6 +49,7 @@ class VideoController extends Controller {
     const { Video, VideoLike, Subscription } = this.app.model
     const { videoId } = this.ctx.params
     let video = await Video.findById(videoId).populate('user', '_id username avatar subscribersCount')
+    console.log('videoId1111111111111111', video)
 
     if (!video) {
       this.ctx.throw(404, 'Video Not Found')

@@ -45,6 +45,7 @@ module.exports = appInfo => {
     expiresIn: '1d'
   }
 
+  // 配置跨域
   config.cors = {
     origin: '*'
     // {string|Function} origin: '*',

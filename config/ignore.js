@@ -1,4 +1,4 @@
 exports.vod = {
-  accessKeyId: 'LTAI4FzgRRRN2MjwBzc3xQtp',
-  accessKeySecret: 'xAllGuORtBDVcrTQpTOWu4HfjYgN1p'
+  accessKeyId: 'LTAI5t7iMGgywytUR6SJHkRn',
+  accessKeySecret: 'ESwyNjfJV4nvjuJj17BIorVF5keGzp'
 }
