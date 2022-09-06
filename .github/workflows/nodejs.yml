@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [10]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
     - name: deploy
@@ -24,10 +24,10 @@ jobs:
         ACCESSKEYID: ${{ secrets.ACCESSKEYID }}
         ACCESSKEYSECRET: ${{ secrets.ACCESSKEYSECRET }}
       with:
-        host: ${{ secret.HOST }}
-        username: ${{ secret.USERNAME }}
-        password: ${{ secret.PASSWORD }}
-        port: ${{ secret.PORT }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
         envs: ACCESSKEYID,ACCESSKEYSECRET
         script:  |
           export ACCESSKEYID=$ACCESSKEYID
