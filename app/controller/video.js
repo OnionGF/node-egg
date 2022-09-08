@@ -7,12 +7,9 @@ class VideoController extends Controller {
     this.ctx.validate({
       title: { type: 'string' },
       description: { type: 'string' },
-      vodVideoId: { type: 'string' }
-      // cover: { type: 'string' }
+      vodVideoId: { type: 'string' },
+      cover: { type: 'string' }
     }, body)
-
-    // 默认视频封面
-    body.cover = 'http://vod.lipengzhou.com/image/default/A806D6D6B0FD4D118F1C824748826104-6-2.png'
 
     body.user = this.ctx.user._id
     const video = await new Video(body).save()
@@ -49,7 +46,6 @@ class VideoController extends Controller {
     const { Video, VideoLike, Subscription } = this.app.model
     const { videoId } = this.ctx.params
     let video = await Video.findById(videoId).populate('user', '_id username avatar subscribersCount')
-    console.log('videoId1111111111111111', video)
 
     if (!video) {
       this.ctx.throw(404, 'Video Not Found')
@@ -98,7 +94,7 @@ class VideoController extends Controller {
       getVideosCount
     ])
     this.ctx.body = {
-      videos,
+      data: videos,
       videosCount
     }
   }

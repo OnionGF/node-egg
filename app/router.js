@@ -8,7 +8,7 @@ module.exports = app => {
 
   router
     .post('/users', controller.user.create) // 用户注册
-    .post('/users/login', controller.user.login) // 用户登录
+    .post('/auth/login', controller.user.login) // 用户登录
     .get('/user', auth, controller.user.getCurrentUser) // 获取当前登录用户
     .patch('/user', auth, controller.user.update) // 更新当前登录用户
     .get('/users/:userId', app.middleware.auth({ required: false }), controller.user.getUser) // 获取用户资料
