@@ -27,8 +27,9 @@ class VodController extends Controller {
     this.ctx.body = await this.app.vodClient.request('RefreshUploadVideo', query, {})
   }
 
-  async getVideoPlayAuth () {
-    const query = this.ctx.query
+  async GetPlayInfo () {
+    const query = this.ctx.params
+    console.log(32, query)
     this.ctx.validate(
       {
         VideoId: { type: 'string' }
@@ -36,7 +37,7 @@ class VodController extends Controller {
       query
     )
 
-    this.ctx.body = await this.app.vodClient.request('GetVideoPlayAuth', query, {})
+    this.ctx.body = await this.app.vodClient.request('GetPlayInfo', query, {})
   }
 }
 

@@ -69,9 +69,15 @@ class VideoController extends Controller {
         video.user.isSubscribed = true
       }
     }
-
+    const { PlayInfoList, VideoBase } = await this.app.vodClient.request('GetPlayInfo', { VideoId: video.vodVideoId }, {})
     this.ctx.body = {
-      video
+      data: {
+        ...video,
+        player: {
+          ...PlayInfoList.PlayInfo[0],
+          ...VideoBase
+        }
+      }
     }
   }
 
@@ -191,6 +197,7 @@ class VideoController extends Controller {
 
     Object.assign(video, this.ctx.helper._.pick(body, ['title', 'description', 'vodVideoId', 'cover']))
 
+    console.log(111, body)
     // 把修改保存到数据库中
     await video.save()
 
@@ -223,10 +230,11 @@ class VideoController extends Controller {
   async createComment () {
     const body = this.ctx.request.body
     const { Video, VideoComment } = this.app.model
+    console.log(233, this.ctx.params)
     const { videoId } = this.ctx.params
     // 数据验证
     this.ctx.validate({
-      content: 'string'
+      text: 'string'
     }, body)
 
     // 获取评论所属的视频
@@ -238,7 +246,7 @@ class VideoController extends Controller {
 
     // 创建评论
     const comment = await new VideoComment({
-      content: body.content,
+      content: body.text,
       user: this.ctx.user._id,
       video: videoId
     }).save()
@@ -251,9 +259,8 @@ class VideoController extends Controller {
 
     // 映射评论所属用户和视频字段数据
     await comment.populate('user').populate('video').execPopulate()
-
     this.ctx.body = {
-      comment
+      data: comment
     }
   }
 
@@ -272,6 +279,9 @@ class VideoController extends Controller {
       .limit(pageSize)
       .populate('user')
       .populate('video')
+      .sort({
+        createdAt: -1
+      })
 
     const getCommentsCount = VideoComment.countDocuments({
       video: videoId
@@ -283,7 +293,7 @@ class VideoController extends Controller {
     ])
 
     this.ctx.body = {
-      comments,
+      data: comments,
       commentsCount
     }
   }
