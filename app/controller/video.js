@@ -60,15 +60,18 @@ class VideoController extends Controller {
     if (this.ctx.user) {
       const userId = this.ctx.user._id
       if (await VideoLike.findOne({ user: userId, video: videoId, like: 1 })) {
+        console.log(63)
         video.isLiked = true
       }
       if (await VideoLike.findOne({ user: userId, video: videoId, like: -1 })) {
+        console.log(67)
         video.isDisliked = true
       }
       if (await Subscription.findOne({ user: userId, channel: video.user._id })) {
         video.user.isSubscribed = true
       }
     }
+    console.log(74, video)
     const { PlayInfoList, VideoBase } = await this.app.vodClient.request('GetPlayInfo', { VideoId: video.vodVideoId }, {})
     this.ctx.body = {
       data: {
@@ -164,7 +167,7 @@ class VideoController extends Controller {
       getVideosCount
     ])
     this.ctx.body = {
-      videos,
+      data: videos,
       videosCount
     }
   }
@@ -426,7 +429,7 @@ class VideoController extends Controller {
       video: videoId,
       like: -1
     })
-
+    await video.save()
     this.ctx.body = {
       video: {
         ...video.toJSON(),

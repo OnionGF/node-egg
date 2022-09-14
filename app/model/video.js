@@ -15,7 +15,7 @@ module.exports = app => {
       type: String,
       required: true
     },
-    cover: { // 视频封面
+    cover: { // 视频封面1
       type: String,
       required: true
     },
