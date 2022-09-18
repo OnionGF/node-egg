@@ -40,7 +40,7 @@ class UserController extends Controller {
     const user = await userService.createUser(body)
 
     // 3. 生成 token
-    const token = userService.createToken({
+    const token = await userService.createToken({
       userId: user._id
     })
 
@@ -105,23 +105,9 @@ class UserController extends Controller {
         token,
         username: user.username,
         channelDescription: user.channelDescription,
-        avatar: user.avatar
-      }
-    }
-  }
-
-  async getCurrentUser () {
-    // 1. 验证 token
-    // 2. 获取用户
-    // 3. 发送响应
-    const user = this.ctx.user
-    this.ctx.body = {
-      user: {
-        email: user.email,
-        token: this.ctx.header.authorization,
-        username: user.username,
-        channelDescription: user.channelDescription,
-        avatar: user.avatar
+        avatar: user.avatar,
+        cover: user.avatar,
+        id: user._id
       }
     }
   }
@@ -271,15 +257,36 @@ class UserController extends Controller {
 
   async getFeedUsers () {
     const Subscription = this.app.model.Subscription
-    let subscriptions = await Subscription.find().populate('channel')
+    let subscriptions = await Subscription.aggregate([
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'channel',
+          foreignField: '_id',
+          as: 'channels'
+        }
+      },
+      {
+        $lookup: {
+          from: 'videos',
+          localField: 'channel',
+          foreignField: 'user',
+          as: 'videosArr'
+        }
+      }
+    ])
+
     subscriptions = subscriptions.map(item => {
-      return this.ctx.helper._.pick(item.channel, [
-        '_id',
-        'username',
-        'avatar',
-        'subscribersCount',
-        'channelDescription'
-      ])
+      return {
+        ...item,
+        ...this.ctx.helper._.pick(item.channels[0], [
+          '_id',
+          'username',
+          'avatar',
+          'subscribersCount',
+          'channelDescription'
+        ])
+      }
     })
     this.ctx.body = {
       data: subscriptions
