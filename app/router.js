@@ -20,6 +20,8 @@ module.exports = app => {
     .get('/vod/CreateUploadVideo', auth, controller.vod.createUploadVideo) // 获取视频上传地址和凭证
     .get('/vod/RefreshUploadVideo', auth, controller.vod.refreshUploadVideo) // 刷新视频上传凭证
     .get('/vod/GetPlayInfo/:VideoId', controller.vod.GetPlayInfo) // 获取视频播放凭证
+    .post('/vod/uploadVideo', controller.vod.uplodaVideo) // 通过视频地址上传视频
+
     .get('/videos/:videoId', app.middleware.auth({ required: false }), controller.video.getVideo) // 获取视频详情
 
     .post('/videos', auth, controller.video.createVideo) // 创建视频

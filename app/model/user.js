@@ -18,11 +18,11 @@ module.exports = app => {
     },
     avatar: { // 头像
       type: String,
-      default: null
+      default: "https://joeschmoe.io/api/v1/random"
     },
     cover: {
       type: String, // 封面
-      default: null
+      default: "https://res.cloudinary.com/dvrrtxqpc/image/upload/v1663663079/samples/sheep.jpg"
     },
     channelDescription: { // 频道介绍
       type: String,

@@ -7,8 +7,8 @@ class VideoController extends Controller {
     this.ctx.validate({
       title: { type: 'string' },
       description: { type: 'string' },
-      vodVideoId: { type: 'string' },
-      cover: { type: 'string' }
+      url: { type: 'string' },
+      thumbnail: { type: 'string' }
     }, body)
 
     body.user = this.ctx.user._id
@@ -106,7 +106,7 @@ class VideoController extends Controller {
   }
 
   async getUserVideos () {
-    const { Video } = this.app.model
+    const { Video, User } = this.app.model
     let { pageNum = 1, pageSize = 10 } = this.ctx.query
     const userId = this.ctx.params.userId
     pageNum = Number.parseInt(pageNum)
@@ -121,6 +121,7 @@ class VideoController extends Controller {
       })
       .skip((pageNum - 1) * pageSize)
       .limit(pageSize)
+    const author = await User.findById(userId)
     const getVideosCount = Video.countDocuments({
       user: userId
     })
@@ -130,6 +131,7 @@ class VideoController extends Controller {
     ])
     this.ctx.body = {
       data: videos,
+      author,
       videosCount
     }
   }

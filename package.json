@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@alicloud/pop-core": "^1.7.10",
+    "ali-oss": "^6.17.1",
     "egg": "^2.15.1",
     "egg-cors": "^2.2.3",
     "egg-mongoose": "^3.3.1",

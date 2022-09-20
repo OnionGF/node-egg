@@ -11,11 +11,11 @@ module.exports = app => {
       type: String,
       required: true
     },
-    vodVideoId: { // VOD 视频 ID
+    url: { // VOD 视频 地址
       type: String,
       required: true
     },
-    cover: { // 视频封面1
+    thumbnail: { // 视频封面1
       type: String,
       required: true
     },
