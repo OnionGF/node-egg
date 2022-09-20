@@ -25,7 +25,7 @@ module.exports = appInfo => {
 
   config.mongoose = {
     client: {
-      url: 'mongodb://127.0.0.1/youtube-clone',
+      url: 'mongodb://127.0.0.1/youtube',
       options: {
         useUnifiedTopology: true
       },
