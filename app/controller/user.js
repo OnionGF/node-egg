@@ -47,11 +47,13 @@ class UserController extends Controller {
     // 4. 发送响应
     this.ctx.body = {
       user: {
-        email: user.email,
+        eemail: user.email,
         token,
         username: user.username,
         channelDescription: user.channelDescription,
-        avatar: user.avatar
+        avatar: user.avatar,
+        cover: user.avatar,
+        id: user._id
       }
     }
   }
@@ -115,6 +117,7 @@ class UserController extends Controller {
   async update () {
     // 1. 基本数据验证
     const body = this.ctx.request.body
+    console.log(12, body)
     this.ctx.validate({
       email: { type: 'email', required: false },
       password: { type: 'string', required: false },
@@ -143,7 +146,7 @@ class UserController extends Controller {
 
     // 5. 返回更新之后的用户信息
     this.ctx.body = {
-      user: {
+      data: {
         email: user.email,
         password: user.password,
         username: user.username,

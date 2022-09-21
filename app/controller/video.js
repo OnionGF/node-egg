@@ -46,7 +46,7 @@ class VideoController extends Controller {
     const { Video, VideoLike, Subscription } = this.app.model
     const { videoId } = this.ctx.params
     let video = await Video.findById(videoId).populate('user', '_id username avatar subscribersCount')
-
+    console.log('video', video)
     if (!video) {
       this.ctx.throw(404, 'Video Not Found')
     }
@@ -69,15 +69,9 @@ class VideoController extends Controller {
         video.user.isSubscribed = true
       }
     }
-    const { PlayInfoList, VideoBase } = await this.app.vodClient.request('GetPlayInfo', { VideoId: video.vodVideoId }, {})
+
     this.ctx.body = {
-      data: {
-        ...video,
-        player: {
-          ...PlayInfoList.PlayInfo[0],
-          ...VideoBase
-        }
-      }
+      data: video
     }
   }
 
@@ -106,7 +100,7 @@ class VideoController extends Controller {
   }
 
   async getUserVideos () {
-    const { Video, User } = this.app.model
+    const { Video, User, Subscription } = this.app.model
     let { pageNum = 1, pageSize = 10 } = this.ctx.query
     const userId = this.ctx.params.userId
     pageNum = Number.parseInt(pageNum)
@@ -122,6 +116,7 @@ class VideoController extends Controller {
       .skip((pageNum - 1) * pageSize)
       .limit(pageSize)
     const author = await User.findById(userId)
+    const channels = await Subscription.findById(userId).populate('channel')
     const getVideosCount = Video.countDocuments({
       user: userId
     })
@@ -132,6 +127,7 @@ class VideoController extends Controller {
     this.ctx.body = {
       data: videos,
       author,
+      channels,
       videosCount
     }
   }

@@ -9,7 +9,7 @@ module.exports = app => {
   router
     .post('/auth/signup', controller.user.create) // 用户注册
     .post('/auth/login', controller.user.login) // 用户登录
-    .patch('/user', auth, controller.user.update) // 更新当前登录用户
+    .post('/user', auth, controller.user.update) // 更新当前登录用户
     .get('/users/:userId', app.middleware.auth({ required: false }), controller.user.getUser) // 获取用户资料
     .get('/users/:userId/subscribe', auth, controller.user.subscribe) // 添加用户订阅
     .get('/users/:userId/subscribe', auth, controller.user.subscribe) // 添加用户订阅
@@ -26,7 +26,6 @@ module.exports = app => {
 
     .post('/videos', auth, controller.video.createVideo) // 创建视频
 
-    .get('/videos', controller.video.getVideos) // 获取视频列表
     .get('/videos', controller.video.getVideos) // 获取TREND视频列表
     .get('/users/:userId/videos', controller.video.getUserVideos) // 获取用户发布的视频列表
     .get('/user/videos/feed', auth, controller.video.getUserFeedVideos) // 获取用户关注的频道视频列表
